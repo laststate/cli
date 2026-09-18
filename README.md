@@ -9,14 +9,16 @@ The LastState Command Line Interface provides developers with tools to integrate
 
 ## Installation
 
+Requires Node 18+. Install from npm:
+
 ```bash
 npm install -g laststate-cli
 ```
 
-Or using Python:
+Then check it runs:
 
 ```bash
-pip install laststate-cli
+laststate --help
 ```
 
 ## Commands
@@ -93,10 +95,9 @@ laststate config set api-key YOUR_API_KEY
    laststate test
    ```
 
-4. Deploy to production:
-   ```bash
-   laststate deploy --environment production
-   ```
+> `test` only runs static probes today (anything it can't verify prints `-`,
+> never a false pass). For real end-to-end proof, use the HIL fixtures in
+> `latch/hil/` and the vectors in `protocol/test-vectors/`.
 
 ## Documentation
 
