@@ -1,6 +1,6 @@
 # LastState CLI
 
-> **v1.2.0 — ultra complete.** Scaffold + build + flash + test + mock + ingest + analyze + symbolicate + stack (`up/down/ps/logs/status/sim/deploy/doctor`) + brand logo in every banner.
+> **v1.2.0.** Scaffold + build + flash + test + mock + ingest + analyze + symbolicate + stack (`up/down/ps/logs/status/sim/deploy/doctor`) + brand logo in every banner.
 > `test` is honest: anything it cannot verify prints `-`, never a false pass. Real validation via `protocol/test-vectors/` and `latch/hil/`.
 
 ## Installation
