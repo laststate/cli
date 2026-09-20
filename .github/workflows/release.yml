@@ -42,7 +42,9 @@ jobs:
           npm run build
           npm test
       - name: Publish to npm with provenance
-        run: npm publish --provenance
+        # --access public is required on first publish: provenance cannot be
+        # generated for a new package with default (restricted) access.
+        run: npm publish --provenance --access public
       - name: Pack tarball for the GitHub release
         run: |
           npm pack
