@@ -1,4 +1,4 @@
-import { execa, type Options } from "execa";
+import { execa, type Options, type Result } from "execa";
 import { existsSync } from "node:fs";
 import { join, resolve, dirname } from "node:path";
 import { log } from "./logger.js";
@@ -10,7 +10,7 @@ export interface RunOpts {
   verbose?: boolean;
 }
 
-export async function run(cmd: string, args: string[], opts: RunOpts = {}) {
+export async function run(cmd: string, args: string[], opts: RunOpts = {}): Promise<Result> {
   const execOpts: Options = {
     cwd: opts.cwd,
     env: { ...process.env, ...opts.env } as Record<string, string>,
