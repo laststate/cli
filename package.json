@@ -3,8 +3,16 @@
   "version": "1.2.0",
   "description": "LastState CLI for embedded crash reporting — Latch → LEP → Relay → Trace",
   "bin": {
-    "laststate": "./dist/index.js",
-    "ls": "./dist/index.js"
+    "laststate": "dist/index.js",
+    "ls": "dist/index.js"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/laststate/cli.git"
   },
   "type": "module",
   "scripts": {

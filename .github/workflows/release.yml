@@ -1,9 +1,13 @@
 name: Release
 # Tag a release with: git tag vX.Y.Z && git push origin vX.Y.Z
 # The tag MUST equal package.json version (checked below).
-# npm trusted publishing must be enabled for laststate-cli on npmjs.com
-# (package settings > Trusted publisher > GitHub Actions, this repo +
-# .github/workflows/release.yml); no NPM_TOKEN is used or needed.
+#
+# npm auth: trusted publishing (OIDC) is preferred — configure it once on
+# npmjs.com (package settings > Trusted publisher > GitHub Actions, this repo
+# + .github/workflows/release.yml). When `NPM_TOKEN` (automation token) is set
+# as a repo secret, the workflow falls back to it; otherwise it uses OIDC.
+# Without either, the first publish fails with
+# `404 'laststate-cli@x.y.z' is not in this registry`.
 on:
   push:
     tags: ['v*']
@@ -41,10 +45,20 @@ jobs:
           npm ci
           npm run build
           npm test
-      - name: Publish to npm with provenance
-        # --access public is required on first publish: provenance cannot be
-        # generated for a new package with default (restricted) access.
-        run: npm publish --provenance --access public
+      - name: Publish to npm
+        # First publish needs --access public (publishConfig covers it, flag
+        # kept for explicitness). Provenance requires OIDC; token auth must
+        # publish without it.
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -n "$NPM_TOKEN" ]; then
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > "$NPM_CONFIG_USERCONFIG"
+            npm publish --access public
+          else
+            npm publish --provenance --access public
+          fi
       - name: Pack tarball for the GitHub release
         run: |
           npm pack
@@ -52,8 +66,12 @@ jobs:
       - name: Smoke test published package
         run: |
           cd "$(mktemp -d)"
-          npm install laststate-cli@"${GITHUB_REF_NAME#v}" --no-save
-          npx laststate-cli --help
+          for i in $(seq 1 10); do
+            npm install laststate-cli@"${GITHUB_REF_NAME#v}" --no-save && break
+            echo "retry $i: package not yet visible on registry" >&2
+            sleep 15
+          done
+          npx laststate --help
       - name: Create GitHub release
         uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # v2
         with:
