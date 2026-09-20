@@ -54,7 +54,7 @@
     "yaml": "^2.9.1"
   },
   "devDependencies": {
-    "@types/boxen": "^2.1.0",
+    "@types/boxen": "^3.0.5",
     "@types/cli-progress": "^3.11.6",
     "@types/node": "^26.6.1",
     "eslint": "^9.0.0",
