@@ -57,7 +57,7 @@
     "@types/boxen": "^3.0.5",
     "@types/cli-progress": "^3.11.6",
     "@types/node": "^26.6.1",
-    "eslint": "^10.10.0",
+    "eslint": "^10.11.0",
     "typescript": "^5.5.0",
     "vite": "^8.3.0",
     "vitest": "^3.2.7"
