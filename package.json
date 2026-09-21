@@ -45,7 +45,7 @@
     "commander": "^12.1.0",
     "conf": "^13.0.0",
     "dotenv": "^17.4.2",
-    "dotenv-expand": "^11.0.7",
+    "dotenv-expand": "^1000.0.0",
     "execa": "^9.6.1",
     "get-port": "^7.2.0",
     "listr2": "^9.0.0",
