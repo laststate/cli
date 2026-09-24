@@ -14,6 +14,7 @@ import { up, down, ps, logs, status } from "./commands/stack.js";
 import { simRun, simStop } from "./commands/sim.js";
 import { deploy, doctor, updateCheck } from "./commands/ops.js";
 import { brand } from "./commands/brand.js";
+import { billingShow, billingCheckoutCmd, billingPortalCmd, billingWatchCmd } from "./commands/billing.js";
 
 export const VERSION = "1.2.0";
 
@@ -152,6 +153,12 @@ export function createProgram(): Command {
   program.command("doctor").description("Environment audit (tools, configs, secrets, endpoints)").option("--fix", "Auto-fix missing secrets").option("--verbose", "Verbose").action(doctor);
 
   program.command("update").description("Check for CLI updates").option("--check", "Check only").action(() => updateCheck());
+
+  const billing = program.command("billing").description("Billing realtime (status, checkout, portal, live tail)");
+  billing.command("status").description("Show live tier + usage from billing-service").action(() => billingShow());
+  billing.command("checkout").description("Start hosted checkout (pilot|fleet|enterprise)").argument("<plan>", "plan").option("--no-open", "Print URL without opening").action((plan: string, o: { open?: boolean }) => billingCheckoutCmd(plan, { open: o.open }));
+  billing.command("portal").description("Open Stripe billing portal").option("--return-url <url>", "Return URL", "https://app.laststate.io/billing").action((o: { returnUrl: string }) => billingPortalCmd(o.returnUrl));
+  billing.command("watch").description("Tail billing events live (SSE)").option("--events <csv>", "Filter, e.g. invoice.paid,subscription.canceled").action((o: { events?: string }) => billingWatchCmd(o));
 
   program.command("brand").description("Show the LastState logo (image by default)").action(brand);
 
